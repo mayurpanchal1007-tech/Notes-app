@@ -5,11 +5,32 @@
 </head>
 <body>
     <h2>Sign Up</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Sign Up</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <p>Already have an account? <a href="/login/">Login</a></p>
+
+    <script>
+        function signup() {
+            const username = document.getElementById('username').value
+            const password = document.getElementById('password').value
+
+            fetch('http://127.0.0.1:8000/api/auth/signup/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.access) {
+                    localStorage.setItem('access_token', data.access)
+                    localStorage.setItem('refresh_token', data.refresh)
+                    window.location.href = '/notes/'
+                } else {
+                    alert('Signup failed')
+                }
+            })
+        }
+    </script>
 </body>
 </html>

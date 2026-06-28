@@ -17,14 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
-from django.contrib.auth import views as auth_views
-from noteapp import views as noteapp_views
+from noteapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('notes/', include('noteapp.urls')),
     path('', RedirectView.as_view(url='/notes/')),
-    path('login/', auth_views.LoginView.as_view(template_name='noteapp/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
-    path('signup/', noteapp_views.signup, name='signup'),
+    path('login/', views.login_page, name='login'),
+    path('signup/', views.signup_page, name='signup'),
 ]
